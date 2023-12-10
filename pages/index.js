@@ -1,118 +1,149 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import React, { useState } from 'react';
 
-const inter = Inter({ subsets: ['latin'] })
+const Index = () => {
+  const [result, setResult] = useState(null);
 
-export default function Home() {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Fetch data from the API endpoint
+    const response = await fetch('/api/predict', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        gender: event.target.gender.value,
+        age: event.target.age.value,
+        hypertension: event.target.hypertension.value,
+        heart_disease: event.target.heart_disease.value,
+        ever_married: event.target.ever_married.value,
+        avg_glucose_level: event.target.avg_glucose_level.value,
+        bmi: event.target.bmi.value,
+        smoking_status: event.target.smoking_status.value,
+        Residence_type: event.target.Residence_type.value,
+        work_type: event.target.work_type.value,
+        // Include other form fields
+      }),
+      
+    });
+  
+    const data = await response.json();
+    console.log('Result from R script:', data.result);
+    if (data.result) {
+      window.alert(result.toString()); // You can customize the alert message
+    } else {
+      window.alert(result.toString());
+    }
+    // Set the result in the component state
+    setResult(data.result);
+
+    // Show an alert based on the prediction result
+    // if (data.result === '1') {
+    //   alert('High risk of stroke!');
+    // } else {
+    //   alert('Low risk of stroke.');
+    // }
+  };
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">pages/index.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className="container mx-auto mt-8 p-4 w-96">
+      <p className='text-3xl'><b>Stroke Prediction</b></p>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label htmlFor="gender" className="block text-sm font-medium text-gray-600">
+            Gender
+          </label>
+          <select className="mt-1 p-2 border rounded-md w-full" id="gender" name="gender" required>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
         </div>
-      </div>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+        <div className="mb-4">
+          <label htmlFor="age" className="block text-sm font-medium text-gray-600">
+            Age
+          </label>
+          <input type="number" className="mt-1 p-2 border rounded-md w-full" id="age" name="age" required />
+        </div>
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+        <div className="mb-4">
+          <label htmlFor="hypertension" className="block text-sm font-medium text-gray-600">
+            Hypertension
+          </label>
+          <input type="number" className="mt-1 p-2 border rounded-md w-full" id="hypertension" name="hypertension" required />
+        </div>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+        {/* Add other form fields here with similar structure */}
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
+        <div className="mb-4">
+          <label htmlFor="bmi" className="block text-sm font-medium text-gray-600">
+            BMI
+          </label>
+          <input type="number" className="mt-1 p-2 border rounded-md w-full" id="bmi" name="bmi" required />
+        </div>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
-}
+        <div className="mb-4">
+          <label htmlFor="smoking_status" className="block text-sm font-medium text-gray-600">
+            Smoking Status
+          </label>
+          <select className="mt-1 p-2 border rounded-md w-full" id="smoking_status" name="smoking_status" required>
+            <option value="formerly_smoked">Formerly Smoked</option>
+            <option value="smokes">Smokes</option>
+            <option value="never_smoked">Never Smoked</option>
+            <option value="Unknown">Unknown</option>
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="Residence_type" className="block text-sm font-medium text-gray-600">
+            Residence Type
+          </label>
+          <select className="mt-1 p-2 border rounded-md w-full" id="Residence_type" name="Residence_type" required>
+            <option value="Urban">Urban</option>
+            <option value="Rural">Rural</option>
+          </select>
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="work_type" className="block text-sm font-medium text-gray-600">
+            Work Type
+          </label>
+          <select className="mt-1 p-2 border rounded-md w-full" id="work_type" name="work_type" required>
+            <option value="Private">Private</option>
+            <option value="children">children</option>
+            <option value="Govt_job">Govt Job</option>
+            <option value="Self_employed">Self Employed</option>
+          </select>
+        </div>
+        <div class="mb-4"> 
+                <label for="heart_disease" class="form-label">Heart Disease</label> 
+
+                <select className='border mt-1 p-2 rounded-md' class="form-select" id="heart_disease" name="heart_disease" required> 
+                    <option value="yes">yes</option> 
+                    <option value="no">no</option> 
+                </select> 
+        </div> 
+        <div class="mb-4"> 
+                <label for="ever_married" class="form-label">Ever Married</label> 
+                <select className='border mt-1 p-2 rounded-md' class="form-select" id="ever_married" name="ever_married" required> 
+                    <option value="yes">yes</option> 
+                    <option value="no">no</option> 
+                </select> 
+            </div>
+        <div className="mb-4">
+          <label htmlFor="avg_glucose_level" className="block text-sm font-medium text-gray-600">
+            Average Glucose Level
+          </label>
+          <input type="number" className="mt-1 p-2 border rounded-md w-full" id="avg_glucose_level" name="avg_glucose_level" required />
+        </div>
+
+        <div>{result && <p className="font-bold">Result: {result}</p>}</div>
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded-md">
+          Submit
+        </button>
+      </form>
+    </div>
+  );
+};
+export default Index;
